@@ -1,0 +1,76 @@
+/* ─── Print Styles for Fee Components ──────────────────────────────────────── */
+@media print {
+
+  /* 1. A4 page setup */
+  @page {
+    size: A4 portrait;
+    margin: 8mm 10mm;
+  }
+
+  /* 2. Colors preserved */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* 3. Hide EVERYTHING on the page first */
+  body * {
+    visibility: hidden !important;
+  }
+
+  /* 4. Show ONLY the printable content */
+  #demand-bill-a4,
+  #demand-bill-a4 *,
+  #fee-receipt-a4,
+  #fee-receipt-a4 * {
+    visibility: visible !important;
+  }
+
+  /* 5. Position printable content at top-left corner */
+  #demand-bill-a4,
+  #fee-receipt-a4 {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border: none !important;
+    background: white !important;
+  }
+
+  /* 6. No page break inside content */
+  #demand-bill-a4,
+  #fee-receipt-a4 {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* 7. Hide no-print elements */
+  .no-print {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  /* 8. Hide MUI Dialog chrome during print */
+  .MuiDialog-root .MuiDialogTitle-root,
+  .MuiDialog-root .MuiDialogActions-root,
+  .MuiBackdrop-root {
+    display: none !important;
+    visibility: hidden !important;
+  }
+
+  .MuiDialog-paper {
+    box-shadow: none !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+  }
+
+  .MuiDialogContent-root {
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+}

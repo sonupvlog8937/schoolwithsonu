@@ -1,0 +1,39 @@
+{
+  "cli": {
+    "version": ">= 24.5.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "preview": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk",
+        "gradleCommand": ":app:assembleRelease"
+      },
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://ourschoolerpwithsonuserver-1.vercel.app/api",
+        "EXPO_PUBLIC_SERVER_URL": "https://ourschoolerpwithsonuserver-1.vercel.app"
+      }
+    },
+    "production": {
+      "autoIncrement": true,
+      "android": {
+        "buildType": "app-bundle"
+      },
+      "env": {
+        "EXPO_PUBLIC_API_URL": "https://ourschoolerpwithsonuserver-1.vercel.app/api",
+        "EXPO_PUBLIC_SERVER_URL": "https://ourschoolerpwithsonuserver-1.vercel.app"
+      }
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

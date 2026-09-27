@@ -1,0 +1,8 @@
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { deleteData, fetchDataFromApi, postData } from '@/utils/api';
+
+export const fetchStudentFee = createAsyncThunk('studentFee/fetch', async (resource: string) => { const response = await fetchDataFromApi(`/student-fee/${resource}`); return { resource, records: response?.data ?? [] }; });
+export const createStudentFee = createAsyncThunk('studentFee/create', async ({ resource, data }: { resource: string; data: Record<string, unknown> }) => postData(`/student-fee/${resource}`, data));
+export const deleteStudentFee = createAsyncThunk('studentFee/delete', async ({ resource, id }: { resource: string; id: string }) => { await deleteData(`/student-fee/${resource}/${id}`); return id; });
+const slice = createSlice({ name: 'studentFee', initialState: { resource: '', records: [] as any[], loading: false, error: null as string | null }, reducers: {}, extraReducers: (builder) => { builder.addCase(fetchStudentFee.pending, (state) => { state.loading = true; }).addCase(fetchStudentFee.fulfilled, (state, action) => { state.loading = false; state.resource = action.payload.resource; state.records = action.payload.records; }).addCase(fetchStudentFee.rejected, (state, action) => { state.loading = false; state.error = action.error.message || 'Unable to load fee records'; }).addCase(createStudentFee.fulfilled, (state, action) => { if (action.payload?.data) state.records.unshift(action.payload.data); }).addCase(deleteStudentFee.fulfilled, (state, action) => { state.records = state.records.filter((record) => record._id !== action.payload); }); } });
+export default slice.reducer;

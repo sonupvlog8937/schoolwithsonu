@@ -1,0 +1,10 @@
+/* Smooth scroll behavior for the whole app */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Fallback cleanup for any legacy links */
+.nav-list {
+  text-decoration: none;
+  color: inherit;
+}

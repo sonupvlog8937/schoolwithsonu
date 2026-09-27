@@ -1,0 +1,2 @@
+import StudentAdmissionList from "../../components/studentInformation/StudentAdmissionList";
+export default function AllStudentDetails() { return <StudentAdmissionList pageTitle="Manage Student All Details" />; }

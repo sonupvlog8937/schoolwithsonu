@@ -1,0 +1,8 @@
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { deleteData, fetchDataFromApi, postData } from '@/utils/api';
+
+export const fetchStudentProfile = createAsyncThunk('studentProfile/fetch', async (resource: string) => { const response = await fetchDataFromApi(`/student-profile/${resource}`); return { resource, records: response?.data ?? [] }; });
+export const createStudentProfile = createAsyncThunk('studentProfile/create', async ({ resource, data }: { resource: string; data: Record<string, unknown> }) => postData(`/student-profile/${resource}`, data));
+export const deleteStudentProfile = createAsyncThunk('studentProfile/delete', async ({ resource, id }: { resource: string; id: string }) => { await deleteData(`/student-profile/${resource}/${id}`); return id; });
+const slice = createSlice({ name: 'studentProfile', initialState: { resource: '', records: [] as any[], loading: false, error: null as string | null }, reducers: {}, extraReducers: (builder) => { builder.addCase(fetchStudentProfile.pending, (state) => { state.loading = true; }).addCase(fetchStudentProfile.fulfilled, (state, action) => { state.loading = false; state.resource = action.payload.resource; state.records = action.payload.records; }).addCase(fetchStudentProfile.rejected, (state, action) => { state.loading = false; state.error = action.error.message || 'Unable to load profile'; }).addCase(createStudentProfile.fulfilled, (state, action) => { if (action.payload?.data) state.records.unshift(action.payload.data); }).addCase(deleteStudentProfile.fulfilled, (state, action) => { state.records = state.records.filter((record) => record._id !== action.payload); }); } });
+export default slice.reducer;

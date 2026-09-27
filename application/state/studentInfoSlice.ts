@@ -1,0 +1,9 @@
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { deleteData, fetchDataFromApi, postData } from '@/utils/api';
+
+const admissionResources = new Set(['admission', 'current', 'all-details']);
+export const fetchStudentInfo = createAsyncThunk('studentInfo/fetch', async (resource: string) => { const response = await fetchDataFromApi(admissionResources.has(resource) ? '/students/all' : `/student-info/${resource}`); return { resource, records: response?.data ?? response?.students ?? [] }; });
+export const createStudentInfo = createAsyncThunk('studentInfo/create', async ({ resource, data }: { resource: string; data: Record<string, unknown> }) => postData(admissionResources.has(resource) ? '/students/add' : `/student-info/${resource}`, data));
+export const deleteStudentInfo = createAsyncThunk('studentInfo/delete', async ({ resource, id }: { resource: string; id: string }) => { await deleteData(`/student-info/${resource}/${id}`); return id; });
+const slice = createSlice({ name: 'studentInfo', initialState: { resource: '', records: [] as any[], loading: false, error: null as string | null }, reducers: {}, extraReducers: (builder) => { builder.addCase(fetchStudentInfo.pending, (state) => { state.loading = true; }).addCase(fetchStudentInfo.fulfilled, (state, action) => { state.loading = false; state.resource = action.payload.resource; state.records = action.payload.records; }).addCase(fetchStudentInfo.rejected, (state, action) => { state.loading = false; state.error = action.error.message || 'Unable to load student info'; }).addCase(createStudentInfo.fulfilled, (state, action) => { if (action.payload?.data) state.records.unshift(action.payload.data); }).addCase(deleteStudentInfo.fulfilled, (state, action) => { state.records = state.records.filter((record) => record._id !== action.payload); }); } });
+export default slice.reducer;
